@@ -11,7 +11,7 @@ function readByAllUserId(id, callback) {
 }
 
 // body: {
-//   items: [{'ship_id', 'qty'}]
+//   items: [{'ship_inventory_id', 'qty'}]
 // }
 function purchase(params, callback) {
 	// Execution of this method starts with the last statement, database.run

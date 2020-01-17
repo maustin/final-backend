@@ -13,16 +13,14 @@ function readOneWithQuantity(id, quantity, callback) {
 	database.get('SELECT * FROM ship_inventory WHERE id = ? AND quantity >= ?', [id, quantity], callback);
 }
 
-// Purchase expects an array of arrays.
-// Each item array should contain first the inventory id, then the quantity.
-// Ex: [['253', '2'], ['47', '1']]
+// Purchase expects an array of objects.
+// Each object must have 'ship_inventory_id' and 'quantity' fields.
+// Ex: [{ ship_inventory_id: '253', quantity: '2' }]
 function purchase(items, callback) {
 	for (item in items) {
 		// Should prob do some type checking here
-		let id = item[0]
-		let quantity = item[1]
 		try
-			await purchaseSingle(item[0], item[1]);
+			await purchaseSingle(item.ship_inventory_id, item.quantity);
 		catch (e)
 			callback(e);
 	}
@@ -52,10 +50,8 @@ function purchaseSingle(shipInventoryId, quantity) {
 function revertPurchase(items, callback) {
 	for (item in items) {
 		// Should prob do some type checking here
-		let id = item[0]
-		let quantity = item[1]
 		try
-			await revertPurchaseSingle(item[0], item[1]);
+			await revertPurchaseSingle(item.ship_inventory_id, item.quantity);
 		catch (e)
 			callback(e);
 	}
@@ -82,10 +78,7 @@ function revertPurchaseSingle(shipInventoryId, quantity) {
 	})	
 }
 
-
-
-// TODO
-// update
+// TODO: Admin ability to add inventory?
 
 database.all('PRAGMA table_info(ship_inventory)', (error, rows) => {
 	if (error)

@@ -34,7 +34,7 @@ router.get('/byuserid/:id', authRequired, (request, response, next) => {
 
 // Purchase
 // body: {
-//   items: [{'ship_id', 'qty'}]
+//   items: [{'ship_inventory_id', 'qty'}]
 // }
 router.post('/', authRequired, paymentValid, (request, response, next) => {
 	inventoryModel.purchase(request.body.items, (error, data) => {
