@@ -11,6 +11,13 @@ function readOne(id, callback) {
 
 // TODO
 // create
+function purchase(params, callback) {
+	
+}
+
+function revertPurchase(params, callback) {
+
+}
 
 // TODO
 // update
