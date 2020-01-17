@@ -37,19 +37,19 @@ router.get('/byuserid/:id', authRequired, (request, response, next) => {
 //   items: [{'ship_id', 'qty'}]
 // }
 router.post('/', authRequired, paymentValid, (request, response, next) => {
-	inventoryModel.purchase(request.body, (error, data) => {
+	inventoryModel.purchase(request.body.items, (error, data) => {
 		if (error) {
 			console.error('InventoryModel purchase error:', error);
-			// 410 Gone ? 409 Conflict ?
+			// Is '410: Gone' appropriate?
 			response.status(410).send(`Insufficient quantity`);
 		}
 		else {
-			// Quantity subtracted from stock, create PO
+			// Quantities subtracted from stock, create PO
 			model.purchase(request.body, (error, data) => {
 				if (error) {
 					console.error('PurchaseOrder purchase error:', error);
 
-					inventoryModel.revertPurchase(request.body, (error, data) => {
+					inventoryModel.revertPurchase(request.body.items, (error, data) => {
 						if (error)
 							console.error('InventoryModel revert purchase error:', error);
 						else
