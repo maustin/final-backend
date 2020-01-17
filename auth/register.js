@@ -13,7 +13,7 @@ module.exports = ({ username, email, password, password2, homeworld }) => {
 		errors.push({ message: 'Passwords do not match.' });
 
 	if (!homeworld)
-		errors.push({ message: 'Please select your homeworld.' }]);
+		errors.push({ message: 'Please select your homeworld.' });
 
 	return {
 		errors,
