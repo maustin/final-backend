@@ -3,16 +3,20 @@ let database = require('../../database');
 let purchaseOrderItemModel = require('../purchaseOrderItem/model');
 
 function readOne(purchaseOrderId, userId, callback) {
+	console.log('puchaseOrder readOne');
 	database.get('SELECT * FROM purchase_order WHERE id = ? AND user_id = ?', [purchaseOrderId, userId], callback);
 }
 
 function readAllByUserId(id, callback) {
+	console.log('purchaseOrder readAllByUserId');
 	database.all('SELECT * FROM purchase_order WHERE user_id = ?', [id], callback);
 }
 
 function purchase(userId, paymentMethodId, paymentAmount, taxPaid, callback) {
+	console.log('purchaseOrder purchase');
 	// Intermediate handler to grab proper 'this', the sql query
 	function purchaseHandlerCallback(error, data) {
+		console.log('purchase order callback');
 		if (error)
 			callback(error);
 		else {
@@ -22,7 +26,7 @@ function purchase(userId, paymentMethodId, paymentAmount, taxPaid, callback) {
 	}
 
 	database.run('INSERT INTO purchase_order ("user_id", "payment_method_id", "payment_amount", "tax_paid", "purchase_date") VALUES (?, ?, ?, ?, ?)',
-		[userId, paymentMethodId, taxPaid, Math.floor(Date.now() / 1000)], purchaseHandlerCallback);
+		[userId, paymentMethodId, paymentAmount, taxPaid, Math.floor(Date.now() / 1000)], purchaseHandlerCallback);
 }
 
 database.all('PRAGMA table_info(purchase_order)', (error, rows) => {

@@ -1,47 +1,50 @@
-let model = './model';
+let model = require('./model');
 
 async function purchase(items) {
-	//return new Promise((resolve, reject) => {
-		let completedItems = [];
-		let error;
-		let totalPrice = 0;
+	console.log('ShipInventory purchase purchase');
+	//let completedItems = [];
+	let error;
+	let totalPrice = 0;
 
-		for (item of items) {
+	for (item of items) {
+		try {
+			let price = await purchaseSingle(item.ship_inventory_id, item.quantity);
+			console.log("got price", price);
+			totalPrice += price;
+		}
+		catch (e) {
+			error = e;
+			break;
+		}
+		//completedItems.push(item);
+	}
+
+	if (error) {
+		// TODO: revert
+		console.error('Failed ShipInventory model purchaseSingle:', error);
+		/*(if (completedItems.length) {
 			try {
-				let price = await purchaseSingle(item.ship_inventory_id, item.quantity);
-				console.log("got price", price);
-				totalPrice += price;
+				await revertPurchase(completedItems);
 			}
 			catch (e) {
-				error = e;
-				break;
+				console.error('ShipInventory controller revertPurchase error:', e);
 			}
-			completedItems.push(item);
-		}
-
-		if (error) {
-			if (completedItems.length) {
-				try {
-					await revertPurchase(completedItems);
-				}
-				catch (e) {
-					console.error('ShipInventory controller revertPurchase error:', e);
-				}
-			}
-			// revert completed
-			//reject(error);
-			throw new Error(error);
-		}
-		else {
-			//resolve(totalPrice);
-			return totalPrice;
-		}
-	//});
+		}*/
+		// revert completed
+		//reject(error);
+		throw new Error(error);
+	}
+	else {
+		//resolve(totalPrice);
+		return totalPrice;
+	}
 }
 
 function purchaseSingle(shipInventoryid, quantity) {
 	return new Promise((resolve, reject) => {
+		console.log('ShipInventory controller purchaseSingle');
 		model.purchase(shipInventoryid, quantity, (error, data) => {
+			console.log(`ShipInventory controller purchaseSingle model purchase returned error: ${error} data: ${data}`);
 			if (error)
 				reject(error);
 			else

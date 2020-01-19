@@ -31,16 +31,22 @@ router.get('/byuserid/:id', authRequired, (request, response, next) => {
 });
 
 router.post('/', authRequired, paymentValid, async (request, response, next) => {
-	try {
-		await controller.purchase(request.userId, request.paymentTypeId, request.body.items);
-		response.sendStatus(200);
+	if (!request.body || !request.body.items || !request.body.items.length) {
+		response.sendStatus(400);
 	}
-	catch (e) {
-		if (e === '410')
-			response.status(410).send('Insufficient quantity');
-		else
-			response.sendStatus(500);
-		// really client doesn't need to know anything other than insufficient quantity or server error
+	else {
+		try {
+			await controller.purchase(request.userId, request.paymentTypeId, request.body.items);
+			response.sendStatus(200);
+		}
+		catch (e) {
+			console.log('got error', e);
+			if (e.message === '410')
+				response.status(410).send('Insufficient quantity');
+			else
+				response.sendStatus(500);
+			// really client doesn't need to know anything other than insufficient quantity or server error
+		}
 	}
 });
 

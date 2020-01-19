@@ -3,12 +3,13 @@ let database = require('../../database');
 
 // Return manufacturer ids and name for the provided ship def id
 function readAllWithShipDefId(id, callback) {
+	console.log('shipManufacturer readAllWithShipDefId');
 	database.all('SELECT ship_manufacturer.id, manufacturer.id AS manufacturer_id, manufacturer.name AS manufacturer_name FROM ship_manufacturer JOIN manufacturer ON ship_manufacturer.manufacturer_id = manufacturer.id WHERE ship_def_id = ?', [id], callback);
 }
 
 // Return ships manufacturer has built
 function readAllWithManufacturerId(id, callback) {
-	console.log('get ships with manf id', id);
+	console.log('shipManufacturer readAllWithManufacturerId');
 	database.all('SELECT ship_manufacturer.id, ship_def.id AS ship_def_id, ship_def.name AS ship_def_name, ship_def.model AS ship_def_model FROM ship_manufacturer JOIN ship_def ON ship_manufacturer.ship_def_id = ship_def.id WHERE manufacturer_id = ?', [id], callback);
 }
 

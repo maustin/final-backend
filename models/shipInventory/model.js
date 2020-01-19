@@ -2,18 +2,22 @@ const COLUMN_DATA = [];
 let database = require('../../database');
 
 function readAll(callback) {
+	console.log('shipInventory readAll');
 	database.all('SELECT * FROM ship_inventory', callback);
 }
 
 function readOne(id, callback) {
+	console.log('shipInventory readOne');
 	database.get('SELECT * FROM ship_inventory WHERE id = ?', [id], callback);
 }
 
 function readOneWithQuantity(id, quantity, callback) {
+	console.log('shipInventory readOneWithQuantity');
 	database.get('SELECT * FROM ship_inventory WHERE id = ? AND quantity >= ?', [id, quantity], callback);
 }
 
 function purchase(shipInventoryId, quantity, callback) {
+	console.log('shipInventory purchase', shipInventoryId);
 	readOneWithQuantity(shipInventoryId, quantity, (error, data) => {
 		if (error)
 			callback(error);
@@ -21,6 +25,7 @@ function purchase(shipInventoryId, quantity, callback) {
 			callback('Insufficient quantity');
 		else {
 			let cost = data.price * quantity;
+			console.log('shipInventory purchase cost:', cost);
 			database.run('UPDATE ship_inventory SET quantity = ? WHERE id = ?', [data.quantity - quantity, shipInventoryId], (error, data) => {
 				if (error)
 					callback(error);
@@ -32,6 +37,7 @@ function purchase(shipInventoryId, quantity, callback) {
 }
 
 function revertPurchase(shipInventoryId, quantity, callback) {
+	console.log('shipInventory revertPurchase');
 	readOne(shipInventoryId, (error, data) => {
 		if (error)
 			callback(error);

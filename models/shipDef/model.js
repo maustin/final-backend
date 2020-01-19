@@ -2,10 +2,12 @@ const COLUMN_DATA = [];
 let database = require('../../database');
 
 function readAll(callback) {
+	console.log('shipDef readAll');
 	database.all('SELECT * FROM ship_def', callback);
 }
 
 function readOne(id, callback) {
+	console.log('shipDef readOne');
 	database.get('SELECT * FROM ship_def WHERE id = ?', [id], callback);
 }
 

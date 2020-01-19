@@ -8,13 +8,15 @@ const SECRET = 'sdflks34dfjsdlfj';
 
 // POST Register
 const register = (req, res) => {
+	console.log('register');
+
 	const { errors, notValid } = validate(req.body);
 
 	if (notValid) {
 		return res.status(400).json({ status: 400, errors });
 	}
 
-	usersTable.readOne(req.body.email, (err, foundUser) => {
+	userTable.readOne(req.body.email, (err, foundUser) => {
 		if (err) {
 			console.error('Register User check email exists error:', err);
 			return res.status(500).json({
@@ -55,7 +57,7 @@ const register = (req, res) => {
 					homeworld: req.body.homeworld,
 				};
 
-				usersTable.create(newUser, (err, data) => {
+				userTable.create(newUser, (err, data) => {
 					if (err)
 						return res.status(500).json({ status: 500, message: err });
 
@@ -67,11 +69,13 @@ const register = (req, res) => {
 }
 
 const login = (req, res) => {
+	console.log('login');
+
 	if (!req.body.email || !req.body.password) {
 		return res.status(400).json({ status: 400, message: 'Please enter email and password.' });
 	}
 
-	usersTable.readOne(req.body.email, (err, foundUser) => {
+	userTable.readOne(req.body.email, (err, foundUser) => {
 		if (err) {
 			console.error('Login failed reading user by email:', err);
 			return res.status(500).json({
@@ -104,7 +108,7 @@ const login = (req, res) => {
 			}
 			else {
 				// set last login timestamp
-				usersTable.setLastLogin(foundUser.id, (err, data) => {
+				userTable.setLastLogin(foundUser.id, (err, data) => {
 					// don't terribly care
 					if (err)
 						console.err('User setLastLogin error:', err);
