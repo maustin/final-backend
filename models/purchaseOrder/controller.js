@@ -1,5 +1,5 @@
 let inventoryController = require('../shipInventory/controller');
-let purchaseOrderItemModel = require('../purchaseOrderItem/model');
+let purchaseOrderItemController = require('../purchaseOrderItem/controller');
 let purchaseOrderModel = require('model');
 
 // 'items' is an array of objects containing an inventory id and a quantity
@@ -21,8 +21,9 @@ function purchase(userId, paymentTypeId, items) => {
 		}
 
 		// Create the purchase order
+		let purchaseOrderId;
 		try {
-			await new Promise((resolve, reject) => {
+			purchaseOrderId = await new Promise((resolve, reject) => {
 				purchaseOrderModel.purchase(userId, paymentTypeId, subtotal, tax, (error, data) => {
 					if (error)
 						reject(error)
@@ -35,11 +36,12 @@ function purchase(userId, paymentTypeId, items) => {
 			console.error('PurchaseOrder Controller purchaseOrderModel purchase error:', e);
 			// TODO: rollback inventory
 			reject(500);
+			// RETURN
 		}
 
 		// Create purchase order line items
 		try {
-
+			await purchaseOrderItemController.create(items, purchaseOrderId);
 		}
 		
 

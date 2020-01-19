@@ -57,4 +57,4 @@ database.all('PRAGMA table_info(ship_inventory)', (error, rows) => {
 		rows.forEach(item => COLUMN_DATA.push(item));
 });
 
-module.exports = { readAll, readOne, COLUMN_DATA };
+module.exports = { readAll, readOne, purchase, revertPurchase, COLUMN_DATA };

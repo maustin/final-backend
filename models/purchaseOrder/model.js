@@ -15,7 +15,7 @@ function readByAllUserId(id, callback) {
 // }
 // TODO: I think the model shouldn't be doing the additional POItem creation.
 // Move this out to the router?
-function purchase(params, callback) {
+/*function purchase(params, callback) {
 	// Execution of this method starts with the last statement, database.run
 
 	let poItemCreatedCallback = function(error, data) {
@@ -52,6 +52,21 @@ function purchase(params, callback) {
 	database.run('INSERT INTO purchase_order ("user_id", "payment_method_id", "payment_amount", "tax_paid", "purchase_date",) VALUE (?, ?, ?, ?, ?)',
 		[params.user_id, params.payment_method_id, params.payment_amoutn, params.tax_paid, Math.floor(Date.now() / 1000)],
 		poCreatedCallback);
+}*/
+
+function purchase(userId, paymentMethodId, paymentAmount, taxPaid, callback) {
+	// Intermediate handler to grab proper 'this', the sql query
+	function purchaseHandlerCallback(error, data) {
+		if (error)
+			callback(error);
+		else {
+			console.log("purchase order created with id:", this.lastID);
+			callback(null, this.lastID);
+		}
+	}
+
+	database.run('INSERT INTO purchase_order ("user_id", "payment_method_id", "payment_amount", "tax_paid", "purchase_date") VALUES (?, ?, ?, ?, ?)',
+		[userId, paymentMethodId, taxPaid, Math.floor(Date.now() / 1000)], purchaseHandlerCallback);
 }
 
 database.all('PRAGAMA table_info(purchase_order)', (error, rows) => {
@@ -61,4 +76,4 @@ database.all('PRAGAMA table_info(purchase_order)', (error, rows) => {
 		rows.forEach(item => COLUMN_DATA.push(item));
 });
 
-module.exports = { readOne, readByAllUserId, create, COLUMN_DATA };
+module.exports = { readOne, readByAllUserId, purchase, COLUMN_DATA };
