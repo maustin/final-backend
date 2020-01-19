@@ -4,23 +4,23 @@ const SECRET = 'sdflks34dfjsdlfj';
 
 module.exports = (request, response, next) => {
 	console.log('auth check');
-	let bearerHeader = req.headers['authorization'];
+	let bearerHeader = request.headers['authorization'];
 
 	if (typeof(bearerHeader) !== 'undefined') {
 		let bearer = bearer.split(' ');
 		let bearerToken = bearer[1];
-		req.token = bearerToken;
+		request.token = bearerToken;
 
-		//let verified = jwt.verify(req.token, SECRET);
+		//let verified = jwt.verify(request.token, SECRET);
 		//console.log('Token verified:', verified);
-		//req.userId = verified._id;
+		//request.userId = verified._id;
 		//next();
 
-		jwt.verify(req.token, SECRET, (err, decoded) => {
+		jwt.verify(request.token, SECRET, (err, decoded) => {
 			if (err)
 				res.status(401).send('Failed authorization');
 			else {
-				req.userId = decoded._id;
+				request.userId = decoded._id;
 				next();
 			}
 		});

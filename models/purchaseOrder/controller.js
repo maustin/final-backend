@@ -16,8 +16,10 @@ function purchase(userId, paymentTypeId, items) => {
 			console.log("subtotal", subtotal);
 		}
 		catch (e) {
+			// InventoryController will handle revert for itself here
 			console.error('PurchaseOrder Controller inventoryController purchase error:', e);
 			reject(410);// insufficient quantity, probably
+			return;
 		}
 
 		// Create the purchase order
@@ -34,18 +36,36 @@ function purchase(userId, paymentTypeId, items) => {
 		}
 		catch (e) {
 			console.error('PurchaseOrder Controller purchaseOrderModel purchase error:', e);
-			// TODO: rollback inventory
+			revertPurchase(items);
 			reject(500);
-			// RETURN
+			return;
 		}
 
 		// Create purchase order line items
 		try {
 			await purchaseOrderItemController.create(items, purchaseOrderId);
 		}
-		
+		catch (e) {
+			console.error('purchaseOrderItemController create error:', e);
+			revertPurchase(items);
+			reject(500);
+			return;
+		}
 
+		// All done? Purchase sucessful!
+		resolve();
 	})
 }
+
+async function revertPurchase(items) {
+	// TODO: consider deleting now invalid PurchaseOrder if it was created
+	// do we care about async here?
+	try {
+		await inventoryController.revertPurchase(items);
+	}
+	catch (e)
+		console.error('InventoryController revertPurchase error:', e);
+}
+
 
 module.exports = { purchase };
