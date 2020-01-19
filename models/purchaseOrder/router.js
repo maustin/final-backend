@@ -31,9 +31,9 @@ router.get('/byuserid/:id', authRequired, (request, response, next) => {
 	});
 });
 
-router.post('/', authRequired, paymentValid, (request, response, next) => {
+router.post('/', authRequired, paymentValid, async (request, response, next) => {
 	try {
-		controller.purchase(request.userId, request.paymentTypeId, request.body.items);
+		await controller.purchase(request.userId, request.paymentTypeId, request.body.items);
 		response.sendStatus(200);
 	}
 	catch (e) {
