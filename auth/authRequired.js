@@ -3,6 +3,13 @@ let jwt = require('jsonwebtoken');
 const SECRET = 'sdflks34dfjsdlfj';
 
 module.exports = (request, response, next) => {
+	// BYPASS
+	if (true) {
+		request.userId = 42;
+		next();
+		return;
+	}
+
 	console.log('auth check');
 	let bearerHeader = request.headers['authorization'];
 
