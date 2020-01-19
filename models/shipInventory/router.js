@@ -14,13 +14,10 @@ router.get('/', (request, response, next) => {
 router.get('/:id', (request, response, next) => {
 	if (error)
 		next(error);
-	else if (data)
-		response.json(data);
 	else
-		response.status(404).send(`ship_inventory with id ${request.params.id} not found`);
+		response.json(data);
+	// data will be empty array if no results
 });
-
-// no delete - set quantity to 0 to remove from list
 
 // create is admin only
 // TODO
