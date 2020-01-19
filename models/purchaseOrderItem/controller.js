@@ -22,7 +22,7 @@ function create(items, purchaseOrderId) {
 			reject(error);
 		}
 		else {
-			resolve();
+			resolve(completedItems);
 		}
 	});
 }
