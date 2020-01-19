@@ -1,11 +1,11 @@
 let inventoryController = require('../shipInventory/controller');
 let purchaseOrderItemController = require('../purchaseOrderItem/controller');
-let purchaseOrderModel = require('model');
+let purchaseOrderModel = require('./model');
 
 // 'items' is an array of objects containing an inventory id and a quantity
 // [{'ship_inventory_id': #, 'quantity': #}]
-function purchase(userId, paymentTypeId, items) => {
-	return new Promise((resolve, reject) => {
+async function purchase(userId, paymentTypeId, items) {
+	//return new Promise((resolve, reject) => {
 		// Attempt to remove quantity from inventory
 		let subtotal;
 		// TODO: tax
@@ -18,8 +18,9 @@ function purchase(userId, paymentTypeId, items) => {
 		catch (e) {
 			// InventoryController will handle revert for itself here
 			console.error('PurchaseOrder Controller inventoryController purchase error:', e);
-			reject(410);// insufficient quantity, probably
-			return;
+			//reject(410);// insufficient quantity, probably
+			//return;
+			throw new Error('410');
 		}
 
 		// Create the purchase order
@@ -37,8 +38,9 @@ function purchase(userId, paymentTypeId, items) => {
 		catch (e) {
 			console.error('PurchaseOrder Controller purchaseOrderModel purchase error:', e);
 			revertPurchase(items);
-			reject(500);
-			return;
+			//reject(500);
+			//return;
+			throw new Error('500');
 		}
 
 		// Create purchase order line items
@@ -48,13 +50,14 @@ function purchase(userId, paymentTypeId, items) => {
 		catch (e) {
 			console.error('purchaseOrderItemController create error:', e);
 			revertPurchase(items);
-			reject(500);
-			return;
+			//reject(500);
+			//return;
+			throw new Error('500')
 		}
 
 		// All done? Purchase sucessful!
-		resolve();
-	})
+		//resolve();
+	//})
 }
 
 async function revertPurchase(items) {
@@ -63,8 +66,9 @@ async function revertPurchase(items) {
 	try {
 		await inventoryController.revertPurchase(items);
 	}
-	catch (e)
+	catch (e) {
 		console.error('InventoryController revertPurchase error:', e);
+	}
 }
 
 

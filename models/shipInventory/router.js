@@ -12,11 +12,13 @@ router.get('/', (request, response, next) => {
 });
 
 router.get('/:id', (request, response, next) => {
-	if (error)
-		next(error);
-	else
-		response.json(data);
-	// data will be empty array if no results
+	model.readOne(request.params.id, (error, data) => {
+		if (error)
+			next(error);
+		else
+			response.json(data);
+		// data will be empty array if no results
+	});
 });
 
 // create is admin only

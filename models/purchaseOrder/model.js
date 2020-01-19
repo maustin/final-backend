@@ -6,7 +6,7 @@ function readOne(purchaseOrderId, userId, callback) {
 	database.get('SELECT * FROM purchase_order WHERE id = ? AND user_id = ?', [purchaseOrderId, userId], callback);
 }
 
-function readByAllUserId(id, callback) {
+function readAllByUserId(id, callback) {
 	database.all('SELECT * FROM purchase_order WHERE user_id = ?', [id], callback);
 }
 
@@ -25,11 +25,11 @@ function purchase(userId, paymentMethodId, paymentAmount, taxPaid, callback) {
 		[userId, paymentMethodId, taxPaid, Math.floor(Date.now() / 1000)], purchaseHandlerCallback);
 }
 
-database.all('PRAGAMA table_info(purchase_order)', (error, rows) => {
+database.all('PRAGMA table_info(purchase_order)', (error, rows) => {
 	if (error)
 		console.error(error);
 	else
 		rows.forEach(item => COLUMN_DATA.push(item));
 });
 
-module.exports = { readOne, readByAllUserId, purchase, COLUMN_DATA };
+module.exports = { readOne, readAllByUserId, purchase, COLUMN_DATA };

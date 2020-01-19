@@ -1,7 +1,7 @@
 let purchaseOrderItemModel = './model';
 
-function create(items, purchaseOrderId) {
-	return new Promise((resolve, reject) => {
+async function create(items, purchaseOrderId) {
+	//return new Promise((resolve, reject) => {
 		let completedItems = [];
 		let error;
 
@@ -19,12 +19,14 @@ function create(items, purchaseOrderId) {
 
 		if (error) {
 			// TODO: revert now-erroneous completed items?
-			reject(error);
+			//reject(error);
+			throw new Error(error);
 		}
 		else {
-			resolve(completedItems);
+			//resolve(completedItems);
+			return completedItems;
 		}
-	});
+	//});
 }
 
 function createSingle(shipInventoryId, quantity, purchaseOrderId) {

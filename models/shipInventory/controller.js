@@ -1,16 +1,17 @@
 let model = './model';
 
-function purchase(items) {
-	return new Promise((resolve, reject) => {
+async function purchase(items) {
+	//return new Promise((resolve, reject) => {
 		let completedItems = [];
 		let error;
 		let totalPrice = 0;
 
 		for (item of items) {
-			try
+			try {
 				let price = await purchaseSingle(item.ship_inventory_id, item.quantity);
 				console.log("got price", price);
 				totalPrice += price;
+			}
 			catch (e) {
 				error = e;
 				break;
@@ -20,18 +21,22 @@ function purchase(items) {
 
 		if (error) {
 			if (completedItems.length) {
-				try
+				try {
 					await revertPurchase(completedItems);
-				catch (e)
+				}
+				catch (e) {
 					console.error('ShipInventory controller revertPurchase error:', e);
+				}
 			}
 			// revert completed
-			reject(error);
+			//reject(error);
+			throw new Error(error);
 		}
 		else {
-			resolve(totalPrice);
+			//resolve(totalPrice);
+			return totalPrice;
 		}
-	});
+	//});
 }
 
 function purchaseSingle(shipInventoryid, quantity) {
@@ -40,17 +45,18 @@ function purchaseSingle(shipInventoryid, quantity) {
 			if (error)
 				reject(error);
 			else
-				resolve(data));// data is the price * quantity
+				resolve(data);// data is the price * quantity
 		});
 	});
 }
 
-function revertPurchase(items) {
-	return new Promise((resolve, reject) => {
+async function revertPurchase(items) {
+	//return new Promise((resolve, reject) => {
 		let errors = [];
 		for (item of items) {
-			try
+			try {
 				await revertPurchaseSingle(item.ship_inventory_id, item.quantity);
+			}
 			catch (e) {
 				// collect errors instead of rejecting immediately
 				errors.push(e);
@@ -58,10 +64,11 @@ function revertPurchase(items) {
 		}
 
 		if (errors.length)
-			reject(errors);
-		else
-			resolve();
-	});
+			throw new Error(errors);
+			//reject(errors);
+		//else
+		//	resolve();
+	//});
 }
 
 function revertPurchaseSingle(shipInventoryid, quantity) {

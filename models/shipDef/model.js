@@ -2,7 +2,7 @@ const COLUMN_DATA = [];
 let database = require('../../database');
 
 function readAll(callback) {
-	database.get('SELECT * FROM ship_def', callback);
+	database.all('SELECT * FROM ship_def', callback);
 }
 
 function readOne(id, callback) {

@@ -8,7 +8,8 @@ function readAllWithShipDefId(id, callback) {
 
 // Return ships manufacturer has built
 function readAllWithManufacturerId(id, callback) {
-	database.all('SELECT ship_manufacturer.id, ship_def_id.id AS ship_def_id, ship_def.name AS ship_def_name, ship_def.model AS ship_def_model FROM ship_manufacturer JOIN ship_def ON ship_manufacturer.ship_def_id = ship_def.id WHERE manufacturer_id = ?', [id], callback);
+	console.log('get ships with manf id', id);
+	database.all('SELECT ship_manufacturer.id, ship_def.id AS ship_def_id, ship_def.name AS ship_def_name, ship_def.model AS ship_def_model FROM ship_manufacturer JOIN ship_def ON ship_manufacturer.ship_def_id = ship_def.id WHERE manufacturer_id = ?', [id], callback);
 }
 
 database.all('PRAGMA table_info(ship_manufacturer)', (error, rows) => {

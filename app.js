@@ -8,17 +8,17 @@ app.use(express.urlencoded({ extended: false }));
 
 // console logging
 app.use((request, response, next) => {
-	console.log(`URL:${req.url} - METHOD:${req.method} - AT:${new Date().toLocaleString()}`);
+	console.log(`URL:${request.url} - METHOD:${request.method} - AT:${new Date().toLocaleString()}`);
 	next();
 })
 
 let authRouter = require('./auth/router');
-let manufacturerRouter = require('./model/manufacturer/router');
-let purchaseOrderRouter = require('./model/purchaseOrder/router');
-let purchaseOrderItemRouter = require('./model/purchaseOrderItem/router');
-let shipDefRouter = require('./model/shipDef/router');
-let shipInventoryRouter = require('./model/shipInventory/router');
-let shipManfacturerRouter = require('./model/shipManufacturer/router');
+let manufacturerRouter = require('./models/manufacturer/router');
+let purchaseOrderRouter = require('./models/purchaseOrder/router');
+let purchaseOrderItemRouter = require('./models/purchaseOrderItem/router');
+let shipDefRouter = require('./models/shipDef/router');
+let shipInventoryRouter = require('./models/shipInventory/router');
+let shipManfacturerRouter = require('./models/shipManufacturer/router');
 
 app.use('/v1/auth', authRouter);
 app.use('/v1/manufacturer', manufacturerRouter);
@@ -29,7 +29,7 @@ app.use('/v1/shipinventory', shipInventoryRouter);
 app.use('/v1/shipmanufacturer', shipManfacturerRouter);
 
 app.get('/', (request, response, next) => {
-	res.send('Hello.');
+	response.send('Hello.');
 });
 
 

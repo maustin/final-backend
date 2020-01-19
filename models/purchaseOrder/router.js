@@ -11,9 +11,10 @@ router.get('/:id', authRequired, (request, response, next) => {
 			console.error('PurchaseOrder model readOne error:', error);
 			response.sendStatus(500);
 		}
-		else
+		else if (data)
 			response.json(data);
-		// data will be empty array if no results
+		else
+			response.sendStatus(404);
 	});
 });
 
@@ -35,7 +36,7 @@ router.post('/', authRequired, paymentValid, async (request, response, next) => 
 		response.sendStatus(200);
 	}
 	catch (e) {
-		if (e === 410)
+		if (e === '410')
 			response.status(410).send('Insufficient quantity');
 		else
 			response.sendStatus(500);

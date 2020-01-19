@@ -8,9 +8,10 @@ router.get('/:id', (request, response, next) => {
 			console.error('PurchaseOrderItem model readOne error:', error);
 			response.sendStatus(500);
 		}
-		else
+		else if (data)
 			response.json(data);
-		// data will be empty array if no results
+		else
+			response.sendStatus(404);
 	});
 });
 
