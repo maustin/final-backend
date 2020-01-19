@@ -11,10 +11,9 @@ router.get('/:id', authRequired, (request, response, next) => {
 			console.error('PurchaseOrder model readOne error:', error);
 			response.sendStatus(500);
 		}
-		else if (data)
-			response.json(data);
 		else
-			response.status(404).send('Cannot find purchase order matching criteria.');
+			response.json(data);
+		// data will be empty array if no results
 	});
 });
 
@@ -24,10 +23,9 @@ router.get('/byuserid/:id', authRequired, (request, response, next) => {
 			console.error('PurchaseOrder model readAllByUserId error:', error);
 			response.sendStatus(500);
 		}
-		else if (data)
-			response.json(data);
 		else
-			response.status(404).send('No purchase orders found.');
+			response.json(data);
+		// data will be empty array if no results
 	});
 });
 

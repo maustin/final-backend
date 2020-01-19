@@ -15,13 +15,10 @@ router.get('/:id', (request, response, next) => {
 	model.readOne(request.params.id, (error, data) => {
 		if (error)
 			next(error);
-		else if (data)
-			response.json(data);
 		else
-			response.status(404).send(`ship_def id ${request.params.id} not found`);
+			response.json(data);
+		// data will be empty array if no results
 	});
 });
-
-// CREATE, UPDATE, DELETE not permitted
 
 module.exports = router;

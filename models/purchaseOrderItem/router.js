@@ -8,10 +8,9 @@ router.get('/:id', (request, response, next) => {
 			console.error('PurchaseOrderItem model readOne error:', error);
 			response.sendStatus(500);
 		}
-		else if (data)
-			response.json(data);
 		else
-			response.status(404).send('Cannot find purchase order item matching criteria.');
+			response.json(data);
+		// data will be empty array if no results
 	});
 });
 

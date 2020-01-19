@@ -22,8 +22,6 @@ router.get('/:id', (request, response, next) => {
 		else
 			response.json(data);
 		// data will just be an empty array if no results
-		//else
-		//	response.status(404).send(`Manufacturer id ${request.params.id} not found`);
 	});
 });
 
