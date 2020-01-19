@@ -36,6 +36,10 @@ router.get('/byuserid/:id', authRequired, (request, response, next) => {
 //   items: [{'ship_inventory_id', 'qty'}]
 // }
 router.post('/', authRequired, paymentValid, (request, response, next) => {
+	// send to controller
+	// - controller handles spawning model requests, rollback, etc
+	// - controller returns final response here
+	
 	inventoryModel.purchase(request.body.items, (error, data) => {
 		if (error) {
 			console.error('InventoryModel purchase error:', error);
