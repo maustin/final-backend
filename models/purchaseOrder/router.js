@@ -18,7 +18,6 @@ router.get('/:id', authRequired, (request, response, next) => {
 	});
 });
 
-// TODO: validate this request from same user, or admin
 router.get('/byuserid/:id', authRequired, (request, response, next) => {
 	model.readAllByUserId(request.params.id, (error, data) => {
 		if (error)
@@ -64,7 +63,5 @@ router.post('/', authRequired, paymentValid, (request, response, next) => {
 		}
 	});
 });
-
-// no reason to update
 
 module.exports = router;

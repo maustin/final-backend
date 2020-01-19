@@ -1,8 +1,6 @@
 const COLUMN_DATA = [];
 let database = require('../../database');
 
-// TODO: it appears we can omit the params array.
-// Check that this performs correctly.
 function readAll(callback) {
 	database.get('SELECT * FROM ship_def', callback);
 }

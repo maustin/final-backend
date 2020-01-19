@@ -13,8 +13,11 @@ function readByAllUserId(id, callback) {
 // body: {
 //   items: [{'ship_inventory_id', 'qty'}]
 // }
+// TODO: I think the model shouldn't be doing the additional POItem creation.
+// Move this out to the router?
 function purchase(params, callback) {
 	// Execution of this method starts with the last statement, database.run
+
 	let poItemCreatedCallback = function(error, data) {
 		return new Promise((resolve, reject) => {
 			if (error) {
@@ -30,6 +33,7 @@ function purchase(params, callback) {
 			callback(error);
 		else {
 			// Create Purchase Order Item for each ship type bought
+			// TODO: I think this loop should be moved into purchase order's model.
 			let poId = this.lastId;
 			for (item of params.items) {
 				try {
