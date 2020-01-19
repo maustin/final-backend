@@ -20,11 +20,12 @@ function purchase(shipInventoryId, quantity, callback) {
 		else if (!data)
 			callback('Insufficient quantity');
 		else {
+			let cost = data.price * quantity;
 			database.run('UPDATE ship_inventory SET quantity = ? WHERE id = ?', [data.quantity - quantity, shipInventoryId], (error, data) => {
 				if (error)
 					callback(error);
 				else
-					callback(null, data);
+					callback(null, cost);
 			});
 		}
 	});

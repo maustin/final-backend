@@ -4,11 +4,14 @@ function purchase(items) {
 	return new Promise((resolve, reject) => {
 		let completedItems = [];
 		let error;
+		let totalPrice = 0;
 
 		for (item of items) {
 			try
-				await purchaseSingle(item.ship_inventory_id, item.quantity);
-			catch(e) {
+				let price = await purchaseSingle(item.ship_inventory_id, item.quantity);
+				console.log("got price", price);
+				totalPrice += price;
+			catch (e) {
 				error = e;
 				break;
 			}
@@ -26,7 +29,7 @@ function purchase(items) {
 			reject(error);
 		}
 		else {
-			resolve();
+			resolve(totalPrice);
 		}
 	});
 }
@@ -37,7 +40,7 @@ function purchaseSingle(shipInventoryid, quantity) {
 			if (error)
 				reject(error);
 			else
-				resolve();
+				resolve(data));// data is the price * quantity
 		});
 	});
 }
@@ -48,7 +51,7 @@ function revertPurchase(items) {
 		for (item of items) {
 			try
 				await revertPurchaseSingle(item.ship_inventory_id, item.quantity);
-			catch(e) {
+			catch (e) {
 				// collect errors instead of rejecting immediately
 				errors.push(e);
 			}
