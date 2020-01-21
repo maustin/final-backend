@@ -11,8 +11,8 @@ function remove(email, callback) {
 }
 
 function create(parameters, callback) {
-	database.run('INSERT INTO user ("username", "email", "homeworld", "password", "created_at") VALUES (?, ?, ?, ?, ?)',
-		[parameters['username'], parameters['email'], parameters['homeworld'], parameters['password'], Math.floor(Date.now() / 1000)],
+	database.run('INSERT INTO user ("email", "homeworld", "password", "created_at") VALUES (?, ?, ?, ?)',
+		[parameters['email'], parameters['homeworld'], parameters['password'], Math.floor(Date.now() / 1000)],
 		callback);
 }
 

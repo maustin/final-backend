@@ -16,8 +16,6 @@ const register = (req, res) => {
 		return res.status(400).json({ status: 400, errors });
 	}
 
-	// TODO: check for no duplicate usernames?
-	// TODO: do we even need usernames?
 	userTable.readOne(req.body.email, (err, foundUser) => {
 		if (err) {
 			console.error('Register User check email exists error:', err);
@@ -53,7 +51,6 @@ const register = (req, res) => {
 				}
 
 				let newUser = {
-					username: req.body.username,
 					email: req.body.email,
 					password: hash,
 					homeworld: req.body.homeworld,
@@ -89,7 +86,7 @@ const login = (req, res) => {
 		if (!foundUser) {
 			return res.status(400).json({
 				status: 400,
-				message: 'Username or password is incorrect. Please try again.'
+				message: 'Email or password is incorrect. Please try again.'
 			});
 		}
 
@@ -105,7 +102,7 @@ const login = (req, res) => {
 			if (!isMatch) {
 				return res.status(400).json({
 					status: 400,
-					message: 'Username or password is incorrect. Please try again.'
+					message: 'Email or password is incorrect. Please try again.'
 				});
 			}
 			else {
