@@ -16,6 +16,8 @@ const register = (req, res) => {
 		return res.status(400).json({ status: 400, errors });
 	}
 
+	// TODO: check for no duplicate usernames?
+	// TODO: do we even need usernames?
 	userTable.readOne(req.body.email, (err, foundUser) => {
 		if (err) {
 			console.error('Register User check email exists error:', err);
