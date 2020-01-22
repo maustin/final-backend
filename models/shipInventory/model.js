@@ -3,17 +3,49 @@ let database = require('../../database');
 
 function readAll(callback) {
 	console.log('shipInventory readAll');
-	database.all('SELECT ship_inventory.*, ship_def.*, promo.price_mod FROM ship_inventory JOIN ship_def ON ship_def.id = ship_inventory.ship_def_id JOIN promo ON promo.id = ship_inventory.promo_id', callback);
+	database.all(
+		`
+		SELECT ship_inventory.*, ship_def.model, ship_def.starship_class,
+		ship_def.length, ship_def.crew, ship_def.passengers, ship_def.max_atmosphering_speed,
+		ship_def.hyperdrive_rating, ship_def.MGLT, ship_def.cargo_capacity,
+		ship_def.consumables, ship_def.image_new, ship_def.image_used,
+		promo.price_mod
+		FROM ship_inventory
+		JOIN ship_def ON ship_def.id = ship_inventory.ship_def_id
+		LEFT JOIN promo ON promo.id = ship_inventory.promo_id
+		`, callback);
 }
 
 function readOne(id, callback) {
 	console.log('shipInventory readOne');
-	database.get('SELECT ship_inventory.*, ship_def.*, promo.price_mod FROM ship_inventory JOIN ship_def ON ship_def.id = ship_inventory.ship_def_id JOIN promo ON promo.id = ship_inventory.promo_id WHERE ship_inventory.id = ?', [id], callback);
+	database.get(`
+		SELECT ship_inventory.*, ship_def.model, ship_def.starship_class,
+		ship_def.length, ship_def.crew, ship_def.passengers, ship_def.max_atmosphering_speed,
+		ship_def.hyperdrive_rating, ship_def.MGLT, ship_def.cargo_capacity,
+		ship_def.consumables, ship_def.image_new, ship_def.image_used,
+		promo.price_mod
+		FROM ship_inventory
+		JOIN ship_def ON ship_def.id = ship_inventory.ship_def_id
+		LEFT JOIN promo ON promo.id = ship_inventory.promo_id
+		WHERE ship_inventory.id = ?
+		`, [id], callback);
+	//database.get('SELECT ship_inventory.*, ship_def.*, promo.price_mod FROM ship_inventory JOIN ship_def ON ship_def.id = ship_inventory.ship_def_id JOIN promo ON promo.id = ship_inventory.promo_id WHERE ship_inventory.id = ?', [id], callback);
 }
 
 function readOneWithPromoId(id, callback) {
 	console.log("shipInventory readOneWithPromoId");
-	database.get('SELECT ship_inventory.*, ship_def.*, promo.price_mod FROM ship_inventory JOIN ship_def ON ship_def.id = ship_inventory.ship_def_id JOIN promo ON promo.id = ship_inventory.promo_id WHERE promo_id = ?', [id], callback);
+	database.get(`
+		SELECT ship_inventory.*, ship_def.model, ship_def.starship_class,
+		ship_def.length, ship_def.crew, ship_def.passengers, ship_def.max_atmosphering_speed,
+		ship_def.hyperdrive_rating, ship_def.MGLT, ship_def.cargo_capacity,
+		ship_def.consumables, ship_def.image_new, ship_def.image_used,
+		promo.price_mod
+		FROM ship_inventory
+		JOIN ship_def ON ship_def.id = ship_inventory.ship_def_id
+		JOIN promo ON promo.id = ship_inventory.promo_id
+		WHERE promo_id = ?
+		`, [id], callback);
+	//database.get('SELECT ship_inventory.*, ship_def.*, promo.price_mod FROM ship_inventory JOIN ship_def ON ship_def.id = ship_inventory.ship_def_id JOIN promo ON promo.id = ship_inventory.promo_id WHERE promo_id = ?', [id], callback);
 }
 
 function readOneWithQuantity(id, quantity, callback) {
