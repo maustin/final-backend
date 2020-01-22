@@ -3,12 +3,17 @@ let database = require('../../database');
 
 function readAll(callback) {
 	console.log('shipInventory readAll');
-	database.all('SELECT * FROM ship_inventory', callback);
+	database.all('SELECT ship_inventory.*, ship_def.*, promo.price_mod FROM ship_inventory JOIN ship_def ON ship_def.id = ship_inventory.ship_def_id JOIN promo ON promo.id = ship_inventory.promo_id', callback);
 }
 
 function readOne(id, callback) {
 	console.log('shipInventory readOne');
-	database.get('SELECT * FROM ship_inventory WHERE id = ?', [id], callback);
+	database.get('SELECT ship_inventory.*, ship_def.*, promo.price_mod FROM ship_inventory JOIN ship_def ON ship_def.id = ship_inventory.ship_def_id JOIN promo ON promo.id = ship_inventory.promo_id WHERE ship_inventory.id = ?', [id], callback);
+}
+
+function readOneWithPromoId(id, callback) {
+	console.log("shipInventory readOneWithPromoId");
+	database.get('SELECT ship_inventory.*, ship_def.*, promo.price_mod FROM ship_inventory JOIN ship_def ON ship_def.id = ship_inventory.ship_def_id JOIN promo ON promo.id = ship_inventory.promo_id WHERE promo_id = ?', [id], callback);
 }
 
 function readOneWithQuantity(id, quantity, callback) {
@@ -63,4 +68,4 @@ database.all('PRAGMA table_info(ship_inventory)', (error, rows) => {
 		rows.forEach(item => COLUMN_DATA.push(item));
 });
 
-module.exports = { readAll, readOne, purchase, revertPurchase, COLUMN_DATA };
+module.exports = { readAll, readOne, readOneWithPromoId, purchase, revertPurchase, COLUMN_DATA };

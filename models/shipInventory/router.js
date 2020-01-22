@@ -21,6 +21,15 @@ router.get('/:id', (request, response, next) => {
 	});
 });
 
+router.get('/withpromoid/:id', (request, response, next) => {
+	model.readOneWithPromoId(request.params.id, (error, data) => {
+		if (error)
+			next(error);
+		else
+			response.json(data);
+	})
+})
+
 // create is admin only
 // TODO
 //router.post()
