@@ -31,12 +31,16 @@ router.get('/byuserid/:id', authRequired, (request, response, next) => {
 });
 
 router.post('/', authRequired, paymentValid, async (request, response, next) => {
-	if (!request.body || !request.body.items || !request.body.items.length) {
+	console.log('Trying purchase order');
+	//console.log(request.body);
+	if (!request.body || !request.body.length) {
+		console.log('failed body check');
 		response.sendStatus(400);
 	}
 	else {
+		console.log('body ok, controller purchase');//, request);
 		try {
-			await controller.purchase(request.userId, request.paymentTypeId, request.body.items);
+			await controller.purchase(request.userId, request.paymentTypeId, request.body);
 			response.sendStatus(200);
 		}
 		catch (e) {

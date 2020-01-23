@@ -7,6 +7,7 @@ async function purchase(items) {
 	let totalPrice = 0;
 
 	for (item of items) {
+		console.log(item);
 		try {
 			let price = await purchaseSingle(item.ship_inventory_id, item.quantity);
 			console.log("got price", price);

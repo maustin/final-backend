@@ -13,10 +13,11 @@ function readAllByUserId(id, callback) {
 }
 
 function purchase(userId, paymentMethodId, paymentAmount, taxPaid, callback) {
-	console.log('purchaseOrder purchase');
+	console.log('purchaseOrder purchase', userId);
 	// Intermediate handler to grab proper 'this', the sql query
 	function purchaseHandlerCallback(error, data) {
 		console.log('purchase order callback');
+		console.log(error, data);
 		if (error)
 			callback(error);
 		else {

@@ -14,7 +14,7 @@ module.exports = (request, response, next) => {
 	let bearerHeader = request.headers['authorization'];
 
 	if (typeof(bearerHeader) !== 'undefined') {
-		let bearer = bearer.split(' ');
+		let bearer = bearerHeader.split(' ');
 		let bearerToken = bearer[1];
 		request.token = bearerToken;
 
@@ -27,7 +27,8 @@ module.exports = (request, response, next) => {
 			if (err)
 				res.status(401).send('Failed authorization');
 			else {
-				request.userId = decoded._id;
+				console.log(decoded);
+				request.userId = decoded.id;
 				next();
 			}
 		});

@@ -1,7 +1,7 @@
 let purchaseOrderItemModel = require('./model');
 
 async function create(items, purchaseOrderId) {
-	console.log('purchaseOrderItem controller create');
+	console.log('purchaseOrderItem controller create', items, purchaseOrderId);
 	let completedItems = [];
 	let error;
 

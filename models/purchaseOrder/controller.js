@@ -5,6 +5,7 @@ let purchaseOrderModel = require('./model');
 // 'items' is an array of objects containing an inventory id and a quantity
 // [{'ship_inventory_id': #, 'quantity': #}]
 async function purchase(userId, paymentTypeId, items) {
+	console.log("purchseorder controller purchase", items);
 	// Attempt to remove quantity from inventory
 	let subtotal;
 	// TODO: tax
