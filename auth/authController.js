@@ -3,8 +3,7 @@ const jwt = require('jsonwebtoken');
 const validate = require('./register');
 const userTable = require('../models/user/model');
 
-// TODO: Move this to ENV
-const SECRET = 'sdflks34dfjsdlfj';
+const SECRET = process.env.AUTH_SECRET;
 
 // POST Register
 const register = (req, res) => {

@@ -1,6 +1,5 @@
 let jwt = require('jsonwebtoken');
-// TODO: Move this to ENV
-const SECRET = 'sdflks34dfjsdlfj';
+const SECRET = process.env.AUTH_SECRET;
 
 module.exports = (request, response, next) => {
 	// BYPASS
