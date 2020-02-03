@@ -6,26 +6,26 @@ const userTable = require('../models/user/model');
 const SECRET = process.env.AUTH_SECRET;
 
 // POST Register
-const register = (req, res) => {
+const register = (request, response) => {
 	console.log('register');
 
-	const { errors, notValid } = validate(req.body);
+	const { errors, notValid } = validate(request.body);
 
 	if (notValid) {
-		return res.status(400).json({ status: 400, errors });
+		return response.status(400).json({ status: 400, errors });
 	}
 
-	userTable.readOne(req.body.email, (err, foundUser) => {
+	userTable.readOne(request.body.email, (err, foundUser) => {
 		if (err) {
 			console.error('Register User check email exists error:', err);
-			return res.status(500).json({
+			return response.status(500).json({
 				status: 500,
 				message: 'Something went wrong. Please try again.'
 			});
 		}
 
 		if (foundUser) {
-			return res.status(400).json({
+			return response.status(400).json({
 				status: 400,
 				message: 'Email address has already been registered.'
 			});
@@ -34,72 +34,72 @@ const register = (req, res) => {
 		bcrypt.genSalt(10, (err, salt) => {
 			if (err) {
 				console.error('bcrypt genSalt error:', err);
-				return res.status(500).json({
+				return response.status(500).json({
 					status: 500,
 					message: 'Something went wrong. Please try again.'
 				})
 			}
 
-			bcrypt.hash(req.body.password, salt, (err, hash) => {
+			bcrypt.hash(request.body.password, salt, (err, hash) => {
 				if (err) {
 					console.error('bcrypt hash error:', err);
-					return res.status(500).json({
+					return response.status(500).json({
 						status: 500,
 						message: 'Something went wrong. Please try again.'
 					})
 				}
 
 				let newUser = {
-					email: req.body.email,
+					email: request.body.email,
 					password: hash,
-					homeworld: req.body.homeworld,
+					homeworld: request.body.homeworld,
 				};
 
 				userTable.create(newUser, (err, data) => {
 					if (err)
-						return res.status(500).json({ status: 500, message: err });
+						return response.status(500).json({ status: 500, message: err });
 
-					res.status(201).json({ status: 201, message: 'success' });
+					response.status(201).json({ status: 201, message: 'success' });
 				});
 			});
 		})
 	});
 }
 
-const login = (req, res) => {
+const login = (request, response) => {
 	console.log('login');
 
-	if (!req.body.email || !req.body.password) {
-		return res.status(400).json({ status: 400, message: 'Please enter email and password.' });
+	if (!request.body.email || !request.body.password) {
+		return response.status(400).json({ status: 400, message: 'Please enter email and password.' });
 	}
 
-	userTable.readOne(req.body.email, (err, foundUser) => {
+	userTable.readOne(request.body.email, (err, foundUser) => {
 		if (err) {
 			console.error('Login failed reading user by email:', err);
-			return res.status(500).json({
+			return response.status(500).json({
 				status: 500,
 				message: 'Something went wrong. Please try again.'
 			});
 		}
 
 		if (!foundUser) {
-			return res.status(400).json({
+			return response.status(400).json({
 				status: 400,
 				message: 'Email or password is incorrect. Please try again.'
 			});
 		}
 
-		bcrypt.compare(req.body.password, foundUser.password, (err, isMatch) => {
+		bcrypt.compare(request.body.password, foundUser.password, (err, isMatch) => {
 			if (err) {
 				console.error('bcrypt compare error:', err);
-				return res.status(500).json({
+				return response.status(500).json({
 					status: 500,
 					message: 'Something went wrong. Please try again.'
 				});
 			}
 
 			if (!isMatch) {
-				return res.status(400).json({
+				return response.status(400).json({
 					status: 400,
 					message: 'Email or password is incorrect. Please try again.'
 				});
@@ -124,7 +124,7 @@ const login = (req, res) => {
 					},
 					(err, signedJwt) => {
 						// TODO: shouldn't we be checking the for err here?
-						return res.status(200).json({
+						return response.status(200).json({
 							status: 200,
 							message: 'success',
 							id: foundUser.id,

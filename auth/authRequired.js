@@ -24,7 +24,7 @@ module.exports = (request, response, next) => {
 
 		jwt.verify(request.token, SECRET, (err, decoded) => {
 			if (err)
-				res.status(401).send('Failed authorization');
+				response.status(401).send('Failed authorization');
 			else {
 				console.log(decoded);
 				request.userId = decoded.id;
@@ -33,6 +33,6 @@ module.exports = (request, response, next) => {
 		});
 	}
 	else {
-		res.status(403).send('Missing authorization');
+		response.status(403).send('Missing authorization');
 	}
 }
