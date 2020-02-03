@@ -1,0 +1,21 @@
+module.exports = {
+	apps : [
+		{
+			name: "gars-backend",
+			cwd: "/var/www/gars/backend/",
+			script: "./index.js",
+			watch: false,
+			ignore_watch: ["database.*"],
+			env: {
+				"PORT": 11011,
+				"NODE_ENV": "development",
+				"AUTH_SECRET": "somekey"
+			},
+			env_production: {
+                                "PORT": 11011,
+                                "NODE_ENV": "production",
+                                "AUTH_SECRET": "somekey"
+                        }
+		}
+	]
+}
